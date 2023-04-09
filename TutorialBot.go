@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"context"
-	"example.com/hello/internal/chatgpt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/vsetiawan/gptbot/internal/chatgpt"
 	"log"
 	"os"
 	"strings"
