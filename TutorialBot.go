@@ -75,7 +75,6 @@ func startBot() {
 }
 
 func receiveUpdates(ctx context.Context, updates tgbotapi.UpdatesChannel) {
-	// `for {` means the loop is infinite until we manually stop it
 	chatGPTSender := chatgpt.NewClient()
 	for {
 		select {
@@ -89,7 +88,7 @@ func receiveUpdates(ctx context.Context, updates tgbotapi.UpdatesChannel) {
 	}
 }
 
-func handleUpdateWithChatGPT(sender chatgpt.Sender, update tgbotapi.Update) {
+func handleUpdateWithChatGPT(sender chatgpt.ResponseGetter, update tgbotapi.Update) {
 	switch {
 	// Handle messages
 	case update.Message != nil:
@@ -103,7 +102,7 @@ func handleUpdateWithChatGPT(sender chatgpt.Sender, update tgbotapi.Update) {
 	}
 }
 
-func handleMessageWithChatGPT(sender chatgpt.Sender, message *tgbotapi.Message) {
+func handleMessageWithChatGPT(responseGetter chatgpt.ResponseGetter, message *tgbotapi.Message) {
 	user := message.From
 	text := message.Text
 
@@ -111,7 +110,7 @@ func handleMessageWithChatGPT(sender chatgpt.Sender, message *tgbotapi.Message) 
 		return
 	}
 	log.Printf("%s wrote %s", user.FirstName, text)
-	resp, err := sender.Send(text)
+	resp, err := responseGetter.GetResponse(text)
 	if err != nil {
 		log.Printf("An error occured: %s", err.Error())
 		tgbotapi.NewMessage(message.Chat.ID, "ChatGPT is busy right now. :(")

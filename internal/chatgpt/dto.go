@@ -19,3 +19,7 @@ type ChatCompletion struct {
 		Index        int    `json:"index"`
 	} `json:"choices"`
 }
+
+func (c *ChatCompletion) GetFirstMessageContent() string {
+	return c.Choices[0].Message.Content
+}
