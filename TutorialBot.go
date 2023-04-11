@@ -42,6 +42,10 @@ var (
 	)
 )
 
+type chatGPTClient interface {
+	Answer(message string) (string, error)
+}
+
 func startBot() {
 	var err error
 	bot, err = tgbotapi.NewBotAPI(os.Getenv("HELLO_BOT_TOKEN"))
@@ -88,11 +92,11 @@ func receiveUpdates(ctx context.Context, updates tgbotapi.UpdatesChannel) {
 	}
 }
 
-func handleUpdateWithChatGPT(sender chatgpt.ResponseGetter, update tgbotapi.Update) {
+func handleUpdateWithChatGPT(chatGPTClient chatGPTClient, update tgbotapi.Update) {
 	switch {
 	// Handle messages
 	case update.Message != nil:
-		handleMessageWithChatGPT(sender, update.Message)
+		handleMessageWithChatGPT(chatGPTClient, update.Message)
 		break
 
 	// Handle button clicks
@@ -102,7 +106,7 @@ func handleUpdateWithChatGPT(sender chatgpt.ResponseGetter, update tgbotapi.Upda
 	}
 }
 
-func handleMessageWithChatGPT(responseGetter chatgpt.ResponseGetter, message *tgbotapi.Message) {
+func handleMessageWithChatGPT(responseGetter chatGPTClient, message *tgbotapi.Message) {
 	user := message.From
 	text := message.Text
 
@@ -110,7 +114,7 @@ func handleMessageWithChatGPT(responseGetter chatgpt.ResponseGetter, message *tg
 		return
 	}
 	log.Printf("%s wrote %s", user.FirstName, text)
-	resp, err := responseGetter.GetResponse(text)
+	resp, err := responseGetter.Answer(text)
 	if err != nil {
 		log.Printf("An error occured: %s", err.Error())
 		tgbotapi.NewMessage(message.Chat.ID, "ChatGPT is busy right now. :(")

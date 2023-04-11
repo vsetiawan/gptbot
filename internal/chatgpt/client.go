@@ -18,10 +18,6 @@ type Client struct {
 	Token string
 }
 
-type ResponseGetter interface {
-	GetResponse(message string) (string, error)
-}
-
 func NewClient() *Client {
 	return &Client{
 		Token: os.Getenv("OPENAI_API_KEY"), // TODO: move this to be done on app start
@@ -33,7 +29,7 @@ type requestBody struct {
 	Content string `json:"content"`
 }
 
-func (c *Client) GetResponse(message string) (string, error) {
+func (c *Client) Answer(message string) (string, error) {
 	req, err := c.constructHttpRequest(message)
 	if err != nil {
 		return "", err
