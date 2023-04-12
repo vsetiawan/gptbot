@@ -113,12 +113,13 @@ func handleMessageWithChatGPT(responseGetter chatGPTClient, message *tgbotapi.Me
 	if user == nil {
 		return
 	}
-	log.Printf("%s wrote %s", user.FirstName, text)
+	log.Printf("%s wrote: %s", user.FirstName, text)
 	resp, err := responseGetter.Answer(text)
 	if err != nil {
 		log.Printf("An error occured: %s", err.Error())
 		tgbotapi.NewMessage(message.Chat.ID, "ChatGPT is busy right now. :(")
 	}
+	log.Printf("%s wrote: %s", "chatgpt", resp)
 	msg := tgbotapi.NewMessage(message.Chat.ID, resp)
 	_, err = bot.Send(msg)
 }

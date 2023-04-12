@@ -1,6 +1,6 @@
 package chatgpt
 
-type ChatCompletion struct {
+type ChatCompletionResponse struct {
 	ID      string `json:"id"`
 	Object  string `json:"object"`
 	Created int64  `json:"created"`
@@ -20,6 +20,10 @@ type ChatCompletion struct {
 	} `json:"choices"`
 }
 
-func (c *ChatCompletion) GetFirstMessageContent() string {
+func (c *ChatCompletionResponse) getAnswer() string {
+	return c.firstChoiceMessageContent()
+}
+
+func (c *ChatCompletionResponse) firstChoiceMessageContent() string {
 	return c.Choices[0].Message.Content
 }
