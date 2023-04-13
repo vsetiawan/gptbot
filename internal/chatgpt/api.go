@@ -13,8 +13,18 @@ const (
 	chatCompletionURL = "https://api.openai.com/v1/chat/completions"
 )
 
+type chatCompletionAPI struct {
+	Token string
+}
+
+type chatCompletionMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
 func (c *Client) chatCompletionAPI(message string) (*ChatCompletionResponse, error) {
-	req, err := c.constructHttpRequest(message)
+	chatCompletionAPI := &chatCompletionAPI{Token: c.Token}
+	req, err := chatCompletionAPI.constructHttpRequest(message)
 	if err != nil {
 		return nil, err
 	}
@@ -24,15 +34,15 @@ func (c *Client) chatCompletionAPI(message string) (*ChatCompletionResponse, err
 		return nil, err
 	}
 
-	chatCompletionResponse, err := toChatCompletionResponse(resp)
+	chatCompletionResponse, err := chatCompletionAPI.toChatCompletionResponse(resp)
 	if err != nil {
 		return nil, err
 	}
 	return chatCompletionResponse, nil
 }
 
-func (c *Client) constructHttpRequest(message string) (*http.Request, error) {
-	payload, err := constructPayload(message)
+func (c *chatCompletionAPI) constructHttpRequest(message string) (*http.Request, error) {
+	payload, err := c.constructPayload(message)
 	if err != nil {
 		return nil, err
 	}
@@ -42,15 +52,14 @@ func (c *Client) constructHttpRequest(message string) (*http.Request, error) {
 		return nil, err
 	}
 
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", c.Token))
+	setDefaultHTTPHeader(req, c.Token)
 	return req, nil
 }
 
-func constructPayload(message string) ([]byte, error) {
+func (c *chatCompletionAPI) constructPayload(message string) ([]byte, error) {
 	data := map[string]interface{}{
 		"model": "gpt-3.5-turbo",
-		"messages": []requestBody{
+		"messages": []chatCompletionMessage{
 			{
 				Role:    "user",
 				Content: message,
@@ -68,7 +77,7 @@ func constructPayload(message string) ([]byte, error) {
 	return payload, err
 }
 
-func toChatCompletionResponse(resp *http.Response) (*ChatCompletionResponse, error) {
+func (c *chatCompletionAPI) toChatCompletionResponse(resp *http.Response) (*ChatCompletionResponse, error) {
 	defer closeRequestBody(resp.Body)
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {

@@ -14,11 +14,6 @@ func NewClient() *Client {
 	}
 }
 
-type requestBody struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
-}
-
 func (c *Client) Answer(message string) (string, error) {
 	resp, err := c.chatCompletionAPI(message)
 	if err != nil {
