@@ -92,10 +92,3 @@ func (c *chatCompletionAPI) toChatCompletionResponse(resp *http.Response) (*Chat
 	}
 	return chatCompletion, nil
 }
-
-func closeRequestBody(Body io.ReadCloser) {
-	err := Body.Close()
-	if err != nil {
-		log.Printf("An error occured: %s", err.Error())
-	}
-}
