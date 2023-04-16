@@ -5,9 +5,14 @@ import (
 	"strconv"
 )
 
+const (
+	telegramUpdateTimeout = 60
+	telegramUpdateOffset  = 60
+)
+
 func newTelegramUpdateConfig() tgbotapi.UpdateConfig {
-	updateConfig := tgbotapi.NewUpdate(0)
-	updateConfig.Timeout = 60
+	updateConfig := tgbotapi.NewUpdate(telegramUpdateOffset)
+	updateConfig.Timeout = telegramUpdateTimeout
 	return updateConfig
 }
 

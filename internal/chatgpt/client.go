@@ -8,9 +8,9 @@ type Client struct {
 	Token string
 }
 
-func NewClient() *Client {
+func NewClient(token string) *Client {
 	return &Client{
-		Token: os.Getenv("OPENAI_API_KEY"), // TODO: move this to be done on app start
+		Token: os.Getenv(token),
 	}
 }
 
