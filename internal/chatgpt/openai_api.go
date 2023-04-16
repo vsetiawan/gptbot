@@ -3,6 +3,7 @@ package chatgpt
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -32,6 +33,10 @@ func (c *Client) chatCompletionAPI(message string) (*ChatCompletionResponse, err
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
+	}
+	if resp.Status != "200" {
+		log.Printf("chat completion API Status Code: %v", resp.Status)
+		return nil, errors.New("error calling chat completion API")
 	}
 
 	chatCompletionResponse, err := chatCompletionAPI.toChatCompletionResponse(resp)

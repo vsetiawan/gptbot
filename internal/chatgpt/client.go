@@ -1,16 +1,12 @@
 package chatgpt
 
-import (
-	"os"
-)
-
 type Client struct {
 	Token string
 }
 
 func NewClient(token string) *Client {
 	return &Client{
-		Token: os.Getenv(token),
+		Token: token,
 	}
 }
 

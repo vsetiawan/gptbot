@@ -7,15 +7,15 @@ import (
 
 type TelegramBot struct {
 	botAPI      *tgbotapi.BotAPI
-	updatesChan <-chan *Update
+	updatesChan <-chan tgbotapi.Update
 }
 
-func NewTelegramBot(token string) (*TelegramBot, error) {
+func NewBot(token string) (*TelegramBot, error) {
 	tgBotAPI, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		return nil, err
 	}
-	updatesChan := makeUpdatesChan(tgBotAPI)
+	updatesChan := makeTgUpdatesChan(tgBotAPI)
 
 	return &TelegramBot{
 		botAPI:      tgBotAPI,
@@ -23,16 +23,16 @@ func NewTelegramBot(token string) (*TelegramBot, error) {
 	}, nil
 }
 
-func (t *TelegramBot) GetUpdatesChan() <-chan *Update {
+func (t *TelegramBot) GetUpdatesChan() <-chan tgbotapi.Update {
 	return t.updatesChan
 }
 
 func (t *TelegramBot) SendResponse(response *Response) error {
-	chatIDInt, err := strconv.ParseInt(response.chatID, 10, 64)
+	chatIDInt, err := strconv.ParseInt(response.ChatID, 10, 64)
 	if err != nil {
 		return err
 	}
-	msg := tgbotapi.NewMessage(chatIDInt, response.content)
+	msg := tgbotapi.NewMessage(chatIDInt, response.Content)
 	_, err = t.botAPI.Send(msg)
 	return nil
 }

@@ -79,7 +79,7 @@ func startBot() {
 }
 
 func receiveUpdates(ctx context.Context, updates tgbotapi.UpdatesChannel) {
-	chatGPTSender := chatgpt.NewClient()
+	chatGPTSender := chatgpt.NewClient(os.Getenv("OPENAI_API_KEY"))
 	for {
 		select {
 		// stop looping if ctx is cancelled

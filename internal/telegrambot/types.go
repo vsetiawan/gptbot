@@ -1,16 +1,14 @@
 package telegrambot
 
 type Update struct {
-	message string
-	chatID  string
+	Message Message
+	ChatID  string
+}
+
+type Message struct {
 }
 
 type Response struct {
-	content string
-	chatID  string
-}
-
-type Bot interface {
-	GetUpdatesChan() <-chan *Update
-	SendResponse(response *Response) error
+	Content string
+	ChatID  string
 }
