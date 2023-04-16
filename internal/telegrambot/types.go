@@ -1,4 +1,4 @@
-package chatbot
+package telegrambot
 
 type Update struct {
 	message string
@@ -12,4 +12,5 @@ type Response struct {
 
 type Bot interface {
 	GetUpdatesChan() <-chan *Update
+	SendResponse(response *Response) error
 }
