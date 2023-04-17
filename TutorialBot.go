@@ -46,7 +46,7 @@ type chatGPTClient interface {
 	Answer(message string) (string, error)
 }
 
-func startBot() {
+func startTutorialBot() {
 	var err error
 	bot, err = tgbotapi.NewBotAPI(os.Getenv("HELLO_BOT_TOKEN"))
 	if err != nil {

@@ -9,21 +9,26 @@ import (
 )
 
 func main() {
+	cancelFunc := startBot()
+	log.Println("Start listening for updates. Press enter to stop")
+	waitForNewlineAndCancelContext(cancelFunc)
+}
+
+func waitForNewlineAndCancelContext(cancelFunc context.CancelFunc) {
+	_, err := bufio.NewReader(os.Stdin).ReadBytes('\n')
+	if err != nil {
+		log.Println(err.Error())
+	}
+	cancelFunc()
+}
+
+func startBot() context.CancelFunc {
 	bot, err := gptbot.NewGPTBot()
 	if err != nil {
 		panic("Error creating GPTBot")
 	}
 	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
+	ctx, cancelFunc := context.WithCancel(ctx)
 	bot.Start(ctx)
-
-	// Tell the user the bot is online
-	log.Println("Start listening for updates. Press enter to stop")
-
-	// Wait for a newline symbol, then cancel handling updates
-	_, err = bufio.NewReader(os.Stdin).ReadBytes('\n')
-	if err != nil {
-		log.Println(err.Error())
-	}
-	cancel()
+	return cancelFunc
 }
