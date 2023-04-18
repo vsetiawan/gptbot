@@ -3,9 +3,12 @@ package lambda
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/vsetiawan/gptbot/internal/telegrambot"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -17,18 +20,40 @@ func handleTelegramWebhookRequest(ctx context.Context, request events.APIGateway
 	if err := json.Unmarshal([]byte(request.Body), &telegramRequest); err != nil {
 		return events.APIGatewayProxyResponse{StatusCode: http.StatusBadRequest}, err
 	}
+	bot, err := telegrambot.NewBot(os.Getenv("HELLO_BOT_TOKEN"))
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode:        500,
+			Headers:           nil,
+			MultiValueHeaders: nil,
+			Body:              "",
+			IsBase64Encoded:   false,
+		}, errors.New("internal server error")
+	}
 
 	// Reply to the message
 	message := fmt.Sprintf("Hi %s, you said: %s", telegramRequest.Message.From.FirstName, telegramRequest.Message.Text)
-	reply := map[string]string{"method": "sendMessage", "chat_id": fmt.Sprintf("%d", telegramRequest.Message.Chat.ID), "text": message}
-	replyJSON, err := json.Marshal(reply)
+	err = bot.SendResponse(&telegrambot.Response{
+		Content: message,
+		ChatID:  strconv.Itoa(telegramRequest.Message.Chat.ID),
+	})
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusInternalServerError}, err
+		return events.APIGatewayProxyResponse{
+			StatusCode:        500,
+			Headers:           nil,
+			MultiValueHeaders: nil,
+			Body:              "",
+			IsBase64Encoded:   false,
+		}, errors.New("internal server error")
 	}
 
-	// Send the reply back to Telegram
-	response := telegrambot.TelegramWebhookResponse{StatusCode: http.StatusOK, Body: string(replyJSON)}
-	return events.APIGatewayProxyResponse{StatusCode: response.StatusCode, Body: response.Body}, nil
+	response := telegrambot.TelegramWebhookResponse{
+		StatusCode: http.StatusOK,
+		Body:       "",
+	}
+	return events.APIGatewayProxyResponse{
+		StatusCode: response.StatusCode, Body: response.Body,
+	}, nil
 }
 
 func main() {
