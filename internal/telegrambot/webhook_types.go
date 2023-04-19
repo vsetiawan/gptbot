@@ -26,6 +26,6 @@ type TelegramWebhookRequest struct {
 
 // TelegramWebhookResponse is the response structure sent back to Telegram
 type TelegramWebhookResponse struct {
-	StatusCode int    `json:"-"`
+	StatusCode int    `json:"status_code"`
 	Body       string `json:"body"`
 }

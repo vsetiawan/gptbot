@@ -5,13 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/vsetiawan/gptbot/internal/telegrambot"
 	"net/http"
 	"os"
 	"strconv"
-
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
 )
 
 // handleTelegramWebhookRequest handles the incoming webhook request
@@ -57,5 +56,7 @@ func handleTelegramWebhookRequest(ctx context.Context, request events.APIGateway
 }
 
 func main() {
-	lambda.Start(handleTelegramWebhookRequest)
+	ctx, cancelFunc := newDefaultContext()
+	defer cancelFunc()
+	lambda.StartWithOptions(handleTelegramWebhookRequest, lambda.WithContext(ctx))
 }
