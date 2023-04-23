@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestChatCompletionResponse_firstChoiceMessageContent(t *testing.T) {
+func TestChatCompletionResponse_getAnswer(t *testing.T) {
 	tests := []struct {
 		name   string
 		fields *ChatCompletionResponse
@@ -28,7 +28,7 @@ func TestChatCompletionResponse_firstChoiceMessageContent(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := tt.fields
-			assert.Equalf(t, tt.want, c.firstChoiceMessageContent(), "firstChoiceMessageContent()")
+			assert.Equalf(t, tt.want, c.getAnswer(), "firstChoiceMessageContent()")
 		})
 	}
 }
