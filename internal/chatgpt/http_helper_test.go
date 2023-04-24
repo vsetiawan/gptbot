@@ -106,7 +106,7 @@ func Test_closeRequestBody(t *testing.T) {
 			assert.Equal(t, tt.expectClosed, actualBody.closed)
 			if tt.expectLog {
 				got := tt.buf.String()
-				assert.NotEqualValues(t, got, "<nil>")
+				assert.NotEqual(t, "<nil>", got)
 			}
 		})
 	}
