@@ -6,8 +6,13 @@ import (
 )
 
 type TelegramBot struct {
-	botAPI      *tgbotapi.BotAPI
+	botAPI      BotAPI
 	updatesChan <-chan tgbotapi.Update
+}
+
+type BotAPI interface {
+	GetUpdatesChan(config tgbotapi.UpdateConfig) tgbotapi.UpdatesChannel
+	Send(c tgbotapi.Chattable) (tgbotapi.Message, error)
 }
 
 func NewBot(token string) (*TelegramBot, error) {

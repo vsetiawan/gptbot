@@ -15,9 +15,9 @@ func newTelegramUpdateConfig() tgbotapi.UpdateConfig {
 	return updateConfig
 }
 
-func makeTgUpdatesChan(tgBotAPI *tgbotapi.BotAPI) <-chan tgbotapi.Update {
+func makeTgUpdatesChan(botAPI BotAPI) <-chan tgbotapi.Update {
 	updateConfig := newTelegramUpdateConfig()
-	tgUpdatesChan := tgBotAPI.GetUpdatesChan(updateConfig)
+	tgUpdatesChan := botAPI.GetUpdatesChan(updateConfig)
 	return tgUpdatesChan
 }
 
