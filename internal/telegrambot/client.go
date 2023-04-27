@@ -2,7 +2,6 @@ package telegrambot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"strconv"
 )
 
 type TelegramBot struct {
@@ -33,11 +32,10 @@ func (t *TelegramBot) GetUpdatesChan() <-chan tgbotapi.Update {
 }
 
 func (t *TelegramBot) SendResponse(response *Response) error {
-	chatIDInt, err := strconv.ParseInt(response.ChatID, 10, 64)
+	msg := tgbotapi.NewMessage(response.ChatID, response.Content)
+	_, err := t.botAPI.Send(msg)
 	if err != nil {
 		return err
 	}
-	msg := tgbotapi.NewMessage(chatIDInt, response.Content)
-	_, err = t.botAPI.Send(msg)
 	return nil
 }

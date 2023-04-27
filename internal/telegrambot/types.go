@@ -10,5 +10,5 @@ type Message struct {
 
 type Response struct {
 	Content string
-	ChatID  string
+	ChatID  int64
 }

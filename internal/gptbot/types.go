@@ -5,7 +5,7 @@ import (
 	"github.com/vsetiawan/gptbot/internal/telegrambot"
 )
 
-type chatBot interface {
+type tgBot interface {
 	GetUpdatesChan() <-chan tgbotapi.Update
 	SendResponse(response *telegrambot.Response) error
 }

@@ -5,7 +5,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/vsetiawan/gptbot/internal/telegrambot"
 	"log"
-	"strconv"
 )
 
 func (g *GPTBot) startReceivingUpdates(ctx context.Context) {
@@ -52,7 +51,7 @@ func (g *GPTBot) handleMessage(message *tgbotapi.Message) {
 	log.Printf("%s wrote: %s", "chatgpt", resp)
 	tgResponse := &telegrambot.Response{
 		Content: resp,
-		ChatID:  strconv.FormatInt(message.Chat.ID, 10),
+		ChatID:  message.Chat.ID,
 	}
 	err = g.tgBot.SendResponse(tgResponse)
 }

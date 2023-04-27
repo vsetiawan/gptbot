@@ -8,13 +8,13 @@ import (
 )
 
 type GPTBot struct {
-	tgBot   chatBot
+	tgBot   tgBot
 	chatGPT chatGPT
 }
 
 func NewGPTBot() (*GPTBot, error) {
-	telegramToken := os.Getenv("HELLO_BOT_TOKEN")
-	tgBot, err := telegrambot.NewBot(telegramToken)
+	tgToken := os.Getenv("HELLO_BOT_TOKEN")
+	tgBot, err := telegrambot.NewBot(tgToken)
 	if err != nil {
 		return nil, err
 	}
