@@ -1,4 +1,4 @@
-package telegrambot
+package telegram
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -15,7 +15,7 @@ func newTelegramUpdateConfig() tgbotapi.UpdateConfig {
 	return updateConfig
 }
 
-func makeTgUpdatesChan(botAPI BotAPI) <-chan tgbotapi.Update {
+func makeTgUpdatesChan(botAPI botAPI) <-chan tgbotapi.Update {
 	updateConfig := newTelegramUpdateConfig()
 	tgUpdatesChan := botAPI.GetUpdatesChan(updateConfig)
 	return tgUpdatesChan

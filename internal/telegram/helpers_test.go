@@ -1,4 +1,4 @@
-package telegrambot
+package telegram
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -33,7 +33,7 @@ func Test_newTelegramUpdateConfig(t *testing.T) {
 
 func Test_makeTgUpdatesChan(t *testing.T) {
 	type args struct {
-		botAPI BotAPI
+		botAPI botAPI
 	}
 	tests := []struct {
 		name string

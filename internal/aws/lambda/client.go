@@ -7,19 +7,18 @@ import (
 	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/vsetiawan/gptbot/internal/telegrambot"
+	"github.com/vsetiawan/gptbot/internal/telegram"
 	"net/http"
 	"os"
-	"strconv"
 )
 
 // handleTelegramWebhookRequest handles the incoming webhook request
 func handleTelegramWebhookRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var telegramRequest telegrambot.TelegramWebhookRequest
+	var telegramRequest telegram.TelegramWebhookRequest
 	if err := json.Unmarshal([]byte(request.Body), &telegramRequest); err != nil {
 		return events.APIGatewayProxyResponse{StatusCode: http.StatusBadRequest}, err
 	}
-	bot, err := telegrambot.NewBot(os.Getenv("HELLO_BOT_TOKEN"))
+	bot, err := telegram.NewBot(os.Getenv("HELLO_BOT_TOKEN"))
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode:        500,
@@ -32,9 +31,9 @@ func handleTelegramWebhookRequest(ctx context.Context, request events.APIGateway
 
 	// Reply to the message
 	message := fmt.Sprintf("Hi %s, you said: %s", telegramRequest.Message.From.FirstName, telegramRequest.Message.Text)
-	err = bot.SendResponse(&telegrambot.Response{
+	err = bot.SendResponse(&telegram.Response{
 		Content: message,
-		ChatID:  strconv.Itoa(telegramRequest.Message.Chat.ID),
+		ChatID:  int64(telegramRequest.Message.Chat.ID),
 	})
 	if err != nil {
 		return events.APIGatewayProxyResponse{
@@ -46,7 +45,7 @@ func handleTelegramWebhookRequest(ctx context.Context, request events.APIGateway
 		}, errors.New("internal server error")
 	}
 
-	response := telegrambot.TelegramWebhookResponse{
+	response := telegram.TelegramWebhookResponse{
 		StatusCode: http.StatusOK,
 		Body:       "",
 	}

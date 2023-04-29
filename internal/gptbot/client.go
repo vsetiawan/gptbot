@@ -3,7 +3,7 @@ package gptbot
 import (
 	"context"
 	"github.com/vsetiawan/gptbot/internal/chatgpt"
-	"github.com/vsetiawan/gptbot/internal/telegrambot"
+	"github.com/vsetiawan/gptbot/internal/telegram"
 	"os"
 )
 
@@ -14,7 +14,7 @@ type GPTBot struct {
 
 func NewGPTBot() (*GPTBot, error) {
 	tgToken := os.Getenv("HELLO_BOT_TOKEN")
-	tgBot, err := telegrambot.NewBot(tgToken)
+	tgBot, err := telegram.NewBot(tgToken)
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package telegrambot
+package telegram
 
 type Update struct {
 	Message Message

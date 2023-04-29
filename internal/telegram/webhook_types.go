@@ -1,4 +1,4 @@
-package telegrambot
+package telegram
 
 // TelegramWebhookRequest is the request structure sent by Telegram to the webhook URL
 type TelegramWebhookRequest struct {

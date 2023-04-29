@@ -3,7 +3,7 @@ package gptbot
 import (
 	"context"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/vsetiawan/gptbot/internal/telegrambot"
+	"github.com/vsetiawan/gptbot/internal/telegram"
 	"log"
 )
 
@@ -49,7 +49,7 @@ func (g *GPTBot) handleMessage(message *tgbotapi.Message) {
 		tgbotapi.NewMessage(message.Chat.ID, "ChatGPT is busy right now. :(")
 	}
 	log.Printf("%s wrote: %s", "chatgpt", resp)
-	tgResponse := &telegrambot.Response{
+	tgResponse := &telegram.Response{
 		Content: resp,
 		ChatID:  message.Chat.ID,
 	}

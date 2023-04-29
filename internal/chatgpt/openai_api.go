@@ -34,8 +34,8 @@ func (c *Client) chatCompletionAPI(message string) (*ChatCompletionResponse, err
 		fmt.Println(err)
 		return nil, err
 	}
-	if resp.Status != "200" {
-		log.Printf("chat completion API Status Code: %v", resp.Status)
+	if resp.StatusCode != 200 {
+		log.Printf("chat completion API Status Code: %v", resp.StatusCode)
 		return nil, errors.New("error calling chat completion API")
 	}
 

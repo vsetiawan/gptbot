@@ -1,39 +1,39 @@
-package telegrambot
+package telegram
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-type TelegramBot struct {
-	botAPI      BotAPI
+type Bot struct {
+	botAPI      botAPI
 	updatesChan <-chan tgbotapi.Update
 }
 
-type BotAPI interface {
+type botAPI interface {
 	GetUpdatesChan(config tgbotapi.UpdateConfig) tgbotapi.UpdatesChannel
 	Send(c tgbotapi.Chattable) (tgbotapi.Message, error)
 }
 
-func NewBot(token string) (*TelegramBot, error) {
+func NewBot(token string) (*Bot, error) {
 	tgBotAPI, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		return nil, err
 	}
 	updatesChan := makeTgUpdatesChan(tgBotAPI)
 
-	return &TelegramBot{
+	return &Bot{
 		botAPI:      tgBotAPI,
 		updatesChan: updatesChan,
 	}, nil
 }
 
-func (t *TelegramBot) GetUpdatesChan() <-chan tgbotapi.Update {
-	return t.updatesChan
+func (b *Bot) GetUpdatesChan() <-chan tgbotapi.Update {
+	return b.updatesChan
 }
 
-func (t *TelegramBot) SendResponse(response *Response) error {
+func (b *Bot) SendResponse(response *Response) error {
 	msg := tgbotapi.NewMessage(response.ChatID, response.Content)
-	_, err := t.botAPI.Send(msg)
+	_, err := b.botAPI.Send(msg)
 	if err != nil {
 		return err
 	}
