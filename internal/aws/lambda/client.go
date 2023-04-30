@@ -31,7 +31,7 @@ func handleTelegramWebhookRequest(ctx context.Context, request events.APIGateway
 
 	// Reply to the message
 	message := fmt.Sprintf("Hi %s, you said: %s", telegramRequest.Message.From.FirstName, telegramRequest.Message.Text)
-	err = bot.SendResponse(&telegram.Response{
+	err = bot.SendMessage(&telegram.Message{
 		Content: message,
 		ChatID:  int64(telegramRequest.Message.Chat.ID),
 	})

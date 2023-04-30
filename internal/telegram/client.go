@@ -31,8 +31,8 @@ func (b *Bot) GetUpdatesChan() <-chan tgbotapi.Update {
 	return b.updatesChan
 }
 
-func (b *Bot) SendResponse(response *Response) error {
-	msg := tgbotapi.NewMessage(response.ChatID, response.Content)
+func (b *Bot) SendMessage(message *Message) error {
+	msg := tgbotapi.NewMessage(message.ChatID, message.Content)
 	_, err := b.botAPI.Send(msg)
 	if err != nil {
 		return err

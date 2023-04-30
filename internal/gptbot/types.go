@@ -7,7 +7,7 @@ import (
 
 type tgBot interface {
 	GetUpdatesChan() <-chan tgbotapi.Update
-	SendResponse(response *telegram.Response) error
+	SendMessage(message *telegram.Message) error
 }
 
 type chatGPT interface {

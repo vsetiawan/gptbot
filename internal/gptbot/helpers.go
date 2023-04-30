@@ -49,11 +49,11 @@ func (g *GPTBot) handleMessage(message *tgbotapi.Message) {
 		tgbotapi.NewMessage(message.Chat.ID, "ChatGPT is busy right now. :(")
 	}
 	log.Printf("%s wrote: %s", "chatgpt", resp)
-	tgResponse := &telegram.Response{
+	tgMessage := &telegram.Message{
 		Content: resp,
 		ChatID:  message.Chat.ID,
 	}
-	err = g.tgBot.SendResponse(tgResponse)
+	err = g.tgBot.SendMessage(tgMessage)
 }
 
 func (g *GPTBot) handleButton(query *tgbotapi.CallbackQuery) {}
