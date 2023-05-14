@@ -53,7 +53,9 @@ func (g *GPTBot) handleMessage(message *tgbotapi.Message) {
 		Content: resp,
 		ChatID:  message.Chat.ID,
 	}
-	err = g.tgBot.SendMessage(tgMessage)
+	if err := g.tgBot.SendMessage(tgMessage); err != nil {
+		log.Printf("An error occurred: %s", err.Error())
+	}
 }
 
 func (g *GPTBot) handleButton(query *tgbotapi.CallbackQuery) {}

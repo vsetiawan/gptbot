@@ -13,8 +13,7 @@ func setDefaultHTTPHeader(req *http.Request, token string) {
 }
 
 func closeRequestBody(Body io.ReadCloser) {
-	err := Body.Close()
-	if err != nil {
+	if err := Body.Close(); err != nil {
 		log.Printf("An error occurred: %s", err.Error())
 	}
 }
