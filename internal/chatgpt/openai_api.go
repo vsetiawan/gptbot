@@ -36,6 +36,7 @@ func (c *Client) chatCompletionAPI(message string) (*ChatCompletionResponse, err
 	}
 	if resp.StatusCode != 200 {
 		log.Printf("chat completion API Status Code: %v", resp.StatusCode)
+		printError(resp)
 		return nil, errors.New("error calling chat completion API")
 	}
 
@@ -80,6 +81,15 @@ func (c *chatCompletionAPI) constructPayload(message string) ([]byte, error) {
 		return nil, err
 	}
 	return payload, err
+}
+
+func printError(resp *http.Response) {
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading body:", err)
+		return
+	}
+	fmt.Println(string(body))
 }
 
 func (c *chatCompletionAPI) toChatCompletionResponse(resp *http.Response) (*ChatCompletionResponse, error) {
